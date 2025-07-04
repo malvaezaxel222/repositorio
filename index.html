@@ -255,33 +255,31 @@
       color: #FFD700;
     }
 
-    .modo-oscuro {
-      background: #333;
-      color: #fff;
-    }
-
-    .modo-oscuro header {
+    /* Estilo para el carrito */
+    #carrito {
       background: #222;
-      color: #FFD700;
+      padding: 30px;
+      text-align: center;
+      border-radius: 10px;
     }
 
-    .modo-oscuro nav {
-      background: #222;
+    #carritoContenido {
+      margin-top: 30px;
+      font-size: 1.3em;
     }
 
-    .modo-oscuro .btn {
-      background: #FFD700;
-      color: #330000;
+    .producto-carrito {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0;
     }
 
-    .modo-oscuro .proximamente {
-      background: #FF6347;
+    .producto-carrito img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
     }
-
-    .modo-oscuro .comentarios {
-      background: #444;
-    }
-
   </style>
 </head>
 <body>
@@ -295,7 +293,6 @@
     <a onclick="mostrarSeccion('inicio')">Inicio</a>
     <a onclick="mostrarSeccion('productos')">Productos</a>
     <a onclick="mostrarSeccion('contacto')">Contacto</a>
-    <a onclick="toggleModoOscuro()" style="color: #FFD700;">Modo Oscuro</a>
     <a onclick="mostrarSeccion('carrito')">Carrito</a>
   </nav>
 
@@ -313,61 +310,17 @@
     <div class="gallery">
       <div class="producto-box">
         <img src="chocolatefeliz.png" alt="Chocolate Feliz">
-        <button class="btn" onclick="mostrarEspecificacion('especificacionesFeliz')">Ver detalles</button>
-        <button class="btn" onclick="agregarAlCarrito('Chocolate Feliz', 15)">Añadir al carrito</button>
-        <button class="like-btn" onclick="incrementarLike('feliz')">&#10084;</button>
-        <div id="like-feliz" class="like-count">0 Me gusta</div>
+        <input type="number" id="cantidadFeliz" placeholder="Cantidad" min="1" />
+        <button class="btn" onclick="agregarAlCarrito('Chocolate Feliz', 'chocolatefeliz.png', 15, document.getElementById('cantidadFeliz').value)">Añadir al carrito</button>
       </div>
+
       <div class="producto-box">
         <img src="explosioncacao.png" alt="Explosión Cacao">
-        <button class="btn" onclick="mostrarEspecificacion('especificacionesCacao')">Ver detalles</button>
-        <button class="btn" onclick="agregarAlCarrito('Explosión Cacao', 22)">Añadir al carrito</button>
-        <button class="like-btn" onclick="incrementarLike('cacao')">&#10084;</button>
-        <div id="like-cacao" class="like-count">0 Me gusta</div>
+        <input type="number" id="cantidadCacao" placeholder="Cantidad" min="1" />
+        <button class="btn" onclick="agregarAlCarrito('Explosión Cacao', 'explosioncacao.png', 22, document.getElementById('cantidadCacao').value)">Añadir al carrito</button>
       </div>
     </div>
-
-    <div class="comentarios">
-      <h3>Deja tu propuesta</h3>
-      <textarea id="nuevaPropuesta" placeholder="Escribe tu idea para nuevos productos..."></textarea>
-      <button class="btn" onclick="agregarComentario()">Publicar</button>
-      <div id="listaComentarios"></div>
-    </div>
-
-    <a class="btn" onclick="mostrarSeccion('inicio')">Volver al inicio</a>
   </section>
-
-  <section class="especificaciones" id="especificacionesFeliz">
-    <h3>Chocolate Feliz</h3>
-    <p>Medidas: 15cm x 15cm</p>
-    <p>Precio: $15.00 MXN</p>
-    <p>Relleno de dulce de leche, decorado con chispas de colores.</p>
-    <button class="btn" onclick="ocultarEspecificaciones()">Cerrar</button>
-  </section>
-
-  <section class="especificaciones" id="especificacionesCacao">
-    <h3>Explosión Cacao</h3>
-    <p>Medidas: 10cm diámetro</p>
-    <p>Precio: $22.00 MXN</p>
-    <p>Esfera de chocolate oscuro rellena de avellana y cereza.</p>
-    <button class="btn" onclick="ocultarEspecificaciones()">Cerrar</button>
-  </section>
-
-  <section id="contacto">
-    <h2>Contacto</h2>
-    <p>Escríbenos para pedidos personalizados:</p>
-    <div class="formulario">
-      <input type="text" id="nombre" placeholder="Tu nombre">
-      <input type="email" id="correo" placeholder="Tu correo">
-      <textarea id="mensaje" rows="4" placeholder="Tu mensaje"></textarea>
-      <button class="btn" onclick="enviarMensaje()">Enviar mensaje</button>
-      <p id="mensajeEnviado">Mensaje enviado. Te llegará en unos días.</p>
-    </div>
-  </section>
-
-  <div class="proximamente" id="mensajeProximamente">
-    ¡Este producto estará disponible pronto! Gracias por tu interés.
-  </div>
 
   <section id="carrito">
     <h2>Carrito de Compras</h2>
@@ -377,21 +330,39 @@
     <button class="btn" onclick="procederAlPago()">Proceder al pago</button>
   </section>
 
-  <!-- Firebase Script -->
   <script>
-    // Configuración de Firebase
-    const firebaseConfig = {
-      apiKey: "tu-api-key",
-      authDomain: "tu-auth-domain",
-      databaseURL: "tu-database-url",
-      projectId: "tu-project-id",
-      storageBucket: "tu-storage-bucket",
-      messagingSenderId: "tu-sender-id",
-      appId: "tu-app-id"
-    };
+    let carrito = [];
 
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    // Función para agregar productos al carrito
+    function agregarAlCarrito(producto, imagen, precio, cantidad) {
+      if (cantidad < 1) return alert("Por favor, selecciona una cantidad válida.");
+      
+      // Añadir el producto al carrito
+      carrito.push({ producto, imagen, precio, cantidad: parseInt(cantidad) });
+      actualizarCarrito();
+    }
+
+    // Función para actualizar el carrito
+    function actualizarCarrito() {
+      const carritoContenido = document.getElementById("carritoContenido");
+      if (carrito.length === 0) {
+        carritoContenido.innerHTML = "<p>No hay productos en tu carrito aún.</p>";
+      } else {
+        carritoContenido.innerHTML = carrito.map(item => `
+          <div class="producto-carrito">
+            <img src="${item.imagen}" alt="${item.producto}">
+            <span>${item.producto} x${item.cantidad} - $${item.precio * item.cantidad}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Función para proceder al pago (simulación)
+    function procederAlPago() {
+      alert("Simulación de pago");
+      carrito = [];
+      actualizarCarrito();
+    }
 
     // Función para mostrar secciones
     function mostrarSeccion(id) {
@@ -404,111 +375,8 @@
       mostrar.classList.add("active");
       window.scrollTo(0, 0);
     }
-
-    // Función para agregar productos al carrito
-    let carrito = [];
-    function agregarAlCarrito(producto, precio) {
-      carrito.push({ producto, precio });
-      actualizarCarrito();
-    }
-
-    function actualizarCarrito() {
-      const carritoContenido = document.getElementById("carritoContenido");
-      if (carrito.length === 0) {
-        carritoContenido.innerHTML = "<p>No hay productos en tu carrito aún.</p>";
-      } else {
-        carritoContenido.innerHTML = "<ul>" + carrito.map(item => `<li>${item.producto} - $${item.precio}</li>`).join('') + "</ul>";
-      }
-    }
-
-    // Función para proceder al pago (simulación)
-    function procederAlPago() {
-      alert("Simulación de pago");
-      carrito = [];
-      actualizarCarrito();
-    }
-
-    // Función para mostrar mensaje "Próximamente"
-    function mostrarProximamente() {
-      const mensaje = document.getElementById("mensajeProximamente");
-      mensaje.style.display = "block";
-      setTimeout(() => {
-        mensaje.style.display = "none";
-      }, 3000);
-    }
-
-    // Función para incrementar likes
-    function incrementarLike(producto) {
-      const likeCount = document.getElementById(`like-${producto}`);
-      let count = parseInt(likeCount.innerText.split(" ")[0]);
-      likeCount.innerText = `${++count} Me gusta`;
-
-      // Guardar likes en Firebase
-      db.ref(`productos/${producto}`).set({
-        likes: count
-      });
-    }
-
-    // Función para agregar comentario
-    function agregarComentario() {
-      const comentario = document.getElementById("nuevaPropuesta").value;
-      if (comentario.trim() !== "") {
-        const comentarioItem = document.createElement("div");
-        comentarioItem.className = "comentario-item";
-        comentarioItem.innerText = comentario;
-
-        // Guardar comentario en Firebase
-        db.ref("comentarios").push({ comentario });
-
-        document.getElementById("listaComentarios").appendChild(comentarioItem);
-        document.getElementById("nuevaPropuesta").value = "";
-      }
-    }
-
-    // Función para cargar comentarios
-    function cargarComentarios() {
-      db.ref("comentarios").on("child_added", (snapshot) => {
-        const comentario = snapshot.val().comentario;
-        const comentarioItem = document.createElement("div");
-        comentarioItem.className = "comentario-item";
-        comentarioItem.innerText = comentario;
-        document.getElementById("listaComentarios").appendChild(comentarioItem);
-      });
-    }
-
-    // Función para enviar mensaje de contacto
-    function enviarMensaje() {
-      const nombre = document.getElementById("nombre").value;
-      const correo = document.getElementById("correo").value;
-      const mensaje = document.getElementById("mensaje").value;
-      
-      if (nombre && correo && mensaje) {
-        // Guardar en Firebase
-        db.ref("mensajes").push({
-          nombre,
-          correo,
-          mensaje
-        });
-
-        document.getElementById("mensajeEnviado").style.display = "block";
-        setTimeout(() => {
-          document.getElementById("mensajeEnviado").style.display = "none";
-        }, 3000);
-      } else {
-        alert("Por favor, llena todos los campos.");
-      }
-    }
-
-    // Función para alternar entre modo oscuro y claro
-    function toggleModoOscuro() {
-      document.body.classList.toggle("modo-oscuro");
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      mostrarSeccion('inicio');
-      cargarComentarios();
-    });
   </script>
+
 </body>
 </html>
 

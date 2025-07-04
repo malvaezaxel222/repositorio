@@ -227,6 +227,29 @@
       }
     }
 
+    /* Animación del carrito flotante */
+    .carrito-flotante {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #FFD700;
+      color: #330000;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5em;
+      cursor: pointer;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+      transition: all 0.3s ease;
+    }
+
+    .carrito-flotante:hover {
+      background: #FF6347;
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body>
@@ -243,12 +266,10 @@
     <a onclick="mostrarSeccion('carrito')">Carrito</a>
   </nav>
 
-  <section class="hero active" id="inicio">
-    <video autoplay muted loop>
-      <source src="video.mp4" type="video/mp4">
-    </video>
+  <section id="inicio" class="hero active">
+    <video autoplay muted loop><source src="video.mp4" type="video/mp4"></video>
     <h1>ChocoFeliz</h1>
-    <h2>El chocolate que conquista paladares millonarios.</h2>
+    <h2>El chocolate que conquista paladares.</h2>
     <a class="btn" onclick="mostrarSeccion('productos')">Descubre nuestros productos</a>
   </section>
 
@@ -257,14 +278,14 @@
     <div class="gallery">
       <div class="producto-box">
         <img src="chocolatefeliz.png" alt="Chocolate Feliz">
-        <input type="number" id="cantidadFeliz" placeholder="Cantidad" min="1" />
-        <button class="btn" onclick="agregarAlCarrito('Chocolate Feliz', 'chocolatefeliz.png', 15, document.getElementById('cantidadFeliz').value)">Añadir al carrito</button>
+        <input type="number" id="cantidadFeliz" min="1" value="1" oninput="validarCantidad('cantidadFeliz', 'btnFeliz')" />
+        <button id="btnFeliz" class="btn" onclick="agregarAlCarrito('Chocolate Feliz', 'chocolatefeliz.png', 15, document.getElementById('cantidadFeliz').value)" disabled>Añadir al carrito</button>
       </div>
 
       <div class="producto-box">
         <img src="explosioncacao.png" alt="Explosión Cacao">
-        <input type="number" id="cantidadCacao" placeholder="Cantidad" min="1" />
-        <button class="btn" onclick="agregarAlCarrito('Explosión Cacao', 'explosioncacao.png', 22, document.getElementById('cantidadCacao').value)">Añadir al carrito</button>
+        <input type="number" id="cantidadCacao" min="1" value="1" oninput="validarCantidad('cantidadCacao', 'btnCacao')" />
+        <button id="btnCacao" class="btn" onclick="agregarAlCarrito('Explosión Cacao', 'explosioncacao.png', 22, document.getElementById('cantidadCacao').value)" disabled>Añadir al carrito</button>
       </div>
     </div>
   </section>
@@ -277,38 +298,51 @@
     <button class="btn" onclick="procederAlPago()">Proceder al pago</button>
   </section>
 
-  <!-- Información de contacto con datos falsos -->
   <section id="contacto">
     <h2>Contacto</h2>
     <p>Escríbenos para pedidos personalizados:</p>
     <p><strong>Correo Electrónico:</strong> contacto@chocofeliz.com</p>
     <p><strong>Teléfono:</strong> +52 55 1234 5678</p>
     <p><strong>Dirección:</strong> Calle del Chocolate, #123, Col. Dulce, Ciudad de México, CDMX, México</p>
-    
     <div class="formulario">
       <input type="text" id="nombre" placeholder="Tu nombre" />
       <input type="email" id="correo" placeholder="Tu correo" />
       <textarea id="mensaje" rows="4" placeholder="Tu mensaje"></textarea>
       <button class="btn" onclick="enviarMensaje()">Enviar mensaje</button>
-      <p id="mensajeEnviado">Mensaje enviado. Te llegará en unos días.</p>
     </div>
   </section>
 
+  <div class="mensajeEmergente" id="mensajeEmergente"></div>
   <div class="proximamente" id="mensajeProximamente">
     ¡Este producto estará disponible pronto! Gracias por tu interés.
   </div>
 
-  <!-- Mensaje emergente -->
-  <div class="mensajeEmergente" id="mensajeEmergente"></div>
+  <div class="carrito-flotante" id="carritoFlotante" onclick="mostrarSeccion('carrito')">
+    🛒
+  </div>
 
   <script>
     let carrito = [];
+    
+    // Función para validar cantidad y habilitar/deshabilitar botón
+    function validarCantidad(inputId, btnId) {
+      const cantidad = document.getElementById(inputId).value;
+      const btn = document.getElementById(btnId);
+      if (cantidad <= 0 || cantidad === "") {
+        btn.disabled = true;
+      } else {
+        btn.disabled = false;
+      }
+    }
 
-    // Función para agregar productos al carrito
+    // Función para agregar al carrito
     function agregarAlCarrito(producto, imagen, precio, cantidad) {
       if (cantidad < 1) return alert("Por favor, selecciona una cantidad válida.");
       carrito.push({ producto, imagen, precio, cantidad: parseInt(cantidad) });
       actualizarCarrito();
+      mostrarMensajeEmergente(`${producto} añadido al carrito.`);
+      animarCarrito();
+      localStorage.setItem("carrito", JSON.stringify(carrito));
     }
 
     // Función para actualizar el carrito
@@ -324,14 +358,30 @@
           </div>
         `).join('');
       }
+      aplicarDescuento();
     }
 
-    // Función para proceder al pago (simulación)
-    function procederAlPago() {
-      mostrarMensajeEmergente("Por el momento no se puede comprar. Esperemos que te haya gustado nuestra página.");
+    // Función para aplicar descuento por cantidad
+    function aplicarDescuento() {
+      const totalUnidades = carrito.reduce((total, item) => total + item.cantidad, 0);
+      const descuento = totalUnidades > 5 ? 0.1 : 0;  // 10% de descuento si hay más de 5 productos
+      const total = carrito.reduce((total, item) => total + item.precio * item.cantidad, 0);
+      const totalConDescuento = total - total * descuento;
+
+      document.getElementById("carritoContenido").innerHTML += `
+        <p>Total: $${total} ${descuento > 0 ? `(Descuento del 10% aplicado)` : ''}</p>
+        <p>Total con descuento: $${totalConDescuento}</p>
+      `;
     }
 
-    // Función para mostrar mensaje emergente
+    // Animación del carrito
+    function animarCarrito() {
+      const carritoFlotante = document.getElementById("carritoFlotante");
+      carritoFlotante.style.transform = "scale(1.2)";
+      setTimeout(() => carritoFlotante.style.transform = "scale(1)", 300);
+    }
+
+    // Mostrar mensaje emergente
     function mostrarMensajeEmergente(mensaje) {
       const mensajeEmergente = document.getElementById("mensajeEmergente");
       mensajeEmergente.innerText = mensaje;
@@ -341,12 +391,21 @@
       }, 3000);
     }
 
-    // Función para enviar mensaje
-    function enviarMensaje() {
-      mostrarMensajeEmergente("¡Muchas gracias por mandarnos un mensaje! Lo tomaremos en cuenta.");
+    // Proceder al pago (simulado)
+    function procederAlPago() {
+      mostrarMensajeEmergente("Por el momento no se puede comprar. Esperemos que te haya gustado nuestra página.");
     }
 
-    // Función para mostrar secciones
+    // Cargar carrito desde localStorage
+    function cargarCarrito() {
+      const carritoGuardado = JSON.parse(localStorage.getItem("carrito"));
+      if (carritoGuardado) {
+        carrito = carritoGuardado;
+        actualizarCarrito();
+      }
+    }
+
+    // Mostrar secciones
     function mostrarSeccion(id) {
       document.querySelectorAll("section").forEach(seccion => {
         seccion.classList.remove("active");
@@ -357,10 +416,15 @@
       mostrar.classList.add("active");
       window.scrollTo(0, 0);
     }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      cargarCarrito();
+    });
   </script>
 
 </body>
 </html>
+
 
 
 

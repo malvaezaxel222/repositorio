@@ -20,6 +20,7 @@
     }
     h1, h2 { font-family: 'Playfair Display', serif; }
 
+    /* Header */
     header {
       background: #fff;
       color: #8B0000;
@@ -27,6 +28,7 @@
       text-align: center;
       font-size: 2.5em;
       font-weight: bold;
+      border-bottom: 3px solid #660000;
     }
     header img {
       max-height: 80px;
@@ -34,6 +36,7 @@
       margin: 0 auto 10px;
     }
 
+    /* Navegación */
     nav {
       background: #660000;
       text-align: center;
@@ -49,11 +52,13 @@
       font-weight: bold;
       font-size: 1.1em;
       cursor: pointer;
+      transition: color 0.3s ease;
     }
     nav a:hover {
       color: #FFD700;
     }
 
+    /* Secciones */
     section {
       min-height: 100vh;
       padding: 60px 20px;
@@ -73,6 +78,7 @@
       to { opacity: 1; }
     }
 
+    /* Hero */
     .hero {
       position: relative;
       color: #fffacd;
@@ -91,11 +97,12 @@
       color: #FFD700;
     }
 
+    /* Botón */
     .btn {
       background: #FFD700;
       color: #330000;
       text-decoration: none;
-      padding: 10px 20px;
+      padding: 12px 25px;
       border-radius: 8px;
       font-weight: bold;
       transition: all 0.3s ease-in-out;
@@ -107,6 +114,7 @@
       transform: scale(1.05);
     }
 
+    /* Galería */
     .gallery {
       display: flex;
       flex-wrap: wrap;
@@ -117,14 +125,19 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      text-align: center;
     }
     .gallery img {
       width: 250px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      transition: transform 0.3s ease;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
     }
 
-    /* Nueva clase para el mensaje de "próximamente" */
+    /* Mensaje de "Próximamente" */
     .proximamente {
       position: fixed;
       top: 50%;
@@ -170,16 +183,21 @@
       color: #FFD700;
     }
 
+    /* Formulario */
     .formulario {
       margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
     .formulario input, .formulario textarea {
-      padding: 10px;
+      padding: 12px;
       width: 100%;
       max-width: 400px;
       margin-bottom: 15px;
       border: none;
       border-radius: 8px;
+      font-size: 1em;
     }
     #mensajeEnviado {
       color: #FFD700;
@@ -187,13 +205,8 @@
       margin-top: 20px;
       display: none;
     }
-    .especificaciones {
-      padding: 40px 20px;
-      background: #1b1b1b;
-      color: #FFD700;
-      display: none;
-      text-align: center;
-    }
+
+    /* Comentarios */
     .comentarios {
       margin-top: 40px;
       background: #1c1c1c;
@@ -319,7 +332,7 @@
       mensaje.style.display = "block";
       setTimeout(() => {
         mensaje.style.display = "none";
-      }, 3000); // Mostrar el mensaje por 3 segundos
+      }, 3000);
     }
 
     function incrementarLike(producto) {
@@ -379,6 +392,7 @@
   </script>
 </body>
 </html>
+
 
 
 

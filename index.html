@@ -323,7 +323,7 @@
 
   <script>
     let carrito = [];
-    
+
     // Función para validar cantidad y habilitar/deshabilitar botón
     function validarCantidad(inputId, btnId) {
       const cantidad = document.getElementById(inputId).value;
@@ -345,16 +345,24 @@
       localStorage.setItem("carrito", JSON.stringify(carrito));
     }
 
+    // Función para eliminar un producto del carrito
+    function eliminarDelCarrito(indice) {
+      carrito.splice(indice, 1);
+      actualizarCarrito();
+      localStorage.setItem("carrito", JSON.stringify(carrito));
+    }
+
     // Función para actualizar el carrito
     function actualizarCarrito() {
       const carritoContenido = document.getElementById("carritoContenido");
       if (carrito.length === 0) {
         carritoContenido.innerHTML = "<p>No hay productos en tu carrito aún.</p>";
       } else {
-        carritoContenido.innerHTML = carrito.map(item => `
+        carritoContenido.innerHTML = carrito.map((item, index) => `
           <div class="producto-carrito">
             <img src="${item.imagen}" alt="${item.producto}">
             <span>${item.producto} x${item.cantidad} - $${item.precio * item.cantidad}</span>
+            <button class="btn" onclick="eliminarDelCarrito(${index})">Eliminar</button>
           </div>
         `).join('');
       }

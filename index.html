@@ -268,7 +268,142 @@
     <a class="btn" onclick="mostrarSeccion('productos')">Descubre nuestros productos</a>
   </section>
 
-  <!-- Aquí continúa el resto de tu código, tal como lo tenías, con los mismos elementos y funciones pero con estas mejoras en el diseño -->
+  <section id="productos">
+    <h2>Nuestros Chocolates Estrella</h2>
+    <div class="gallery">
+      <div class="producto-box">
+        <img src="chocolatefeliz.png" alt="Chocolate Feliz">
+        <button class="btn" onclick="mostrarEspecificacion('especificacionesFeliz')">Ver detalles</button>
+        <button class="btn" onclick="mostrarProximamente()">Comprar</button>
+        <button class="like-btn" onclick="incrementarLike('feliz')">&#10084;</button>
+        <div id="like-feliz" class="like-count">0 Me gusta</div>
+      </div>
+      <div class="producto-box">
+        <img src="explosioncacao.png" alt="Explosión Cacao">
+        <button class="btn" onclick="mostrarEspecificacion('especificacionesCacao')">Ver detalles</button>
+        <button class="btn" onclick="mostrarProximamente()">Comprar</button>
+        <button class="like-btn" onclick="incrementarLike('cacao')">&#10084;</button>
+        <div id="like-cacao" class="like-count">0 Me gusta</div>
+      </div>
+    </div>
+
+    <div class="comentarios">
+      <h3>Deja tu propuesta</h3>
+      <textarea id="nuevaPropuesta" placeholder="Escribe tu idea para nuevos productos..."></textarea>
+      <button class="btn" onclick="agregarComentario()">Publicar</button>
+      <div id="listaComentarios"></div>
+    </div>
+
+    <a class="btn" onclick="mostrarSeccion('inicio')">Volver al inicio</a>
+  </section>
+
+  <section class="especificaciones" id="especificacionesFeliz">
+    <h3>Chocolate Feliz</h3>
+    <p>Medidas: 15cm x 15cm</p>
+    <p>Precio: $15.00 MXN</p>
+    <p>Relleno de dulce de leche, decorado con chispas de colores.</p>
+    <button class="btn" onclick="ocultarEspecificaciones()">Cerrar</button>
+  </section>
+
+  <section class="especificaciones" id="especificacionesCacao">
+    <h3>Explosión Cacao</h3>
+    <p>Medidas: 10cm diámetro</p>
+    <p>Precio: $22.00 MXN</p>
+    <p>Esfera de chocolate oscuro rellena de avellana y cereza.</p>
+    <button class="btn" onclick="ocultarEspecificaciones()">Cerrar</button>
+  </section>
+
+  <section id="contacto">
+    <h2>Contacto</h2>
+    <p>Escríbenos para pedidos personalizados:</p>
+    <div class="formulario">
+      <input type="text" id="nombre" placeholder="Tu nombre">
+      <input type="email" id="correo" placeholder="Tu correo">
+      <textarea id="mensaje" rows="4" placeholder="Tu mensaje"></textarea>
+      <button class="btn" onclick="enviarMensaje()">Enviar mensaje</button>
+      <p id="mensajeEnviado">Mensaje enviado. Te llegará en unos días.</p>
+    </div>
+  </section>
+
+  <div class="proximamente" id="mensajeProximamente">
+    ¡Este producto estará disponible pronto! Gracias por tu interés.
+  </div>
+
+  <script>
+    function mostrarSeccion(id) {
+      document.querySelectorAll("section").forEach(seccion => {
+        seccion.classList.remove("active");
+        seccion.style.display = "none";
+      });
+      const mostrar = document.getElementById(id);
+      mostrar.style.display = "flex";
+      mostrar.classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    function mostrarProximamente() {
+      const mensaje = document.getElementById("mensajeProximamente");
+      mensaje.style.display = "block";
+      setTimeout(() => {
+        mensaje.style.display = "none";
+      }, 3000); // Mostrar el mensaje por 3 segundos
+    }
+
+    function incrementarLike(producto) {
+      const likeCount = document.getElementById(`like-${producto}`);
+      let count = parseInt(likeCount.innerText.split(" ")[0]);
+      likeCount.innerText = `${++count} Me gusta`;
+    }
+
+    function enviarMensaje() {
+      const nombre = document.getElementById("nombre").value;
+      const correo = document.getElementById("correo").value;
+      const mensaje = document.getElementById("mensaje").value;
+      const mailtoLink = `mailto:malvaezaxel324@gmail.com?subject=Mensaje de ${nombre}&body=Correo: ${correo}%0A%0AMensaje:%0A${mensaje}`;
+      window.location.href = mailtoLink;
+      document.getElementById("mensajeEnviado").style.display = "block";
+    }
+
+    function agregarComentario() {
+      const texto = document.getElementById("nuevaPropuesta").value;
+      if (texto.trim() !== "") {
+        const comentario = document.createElement("div");
+        comentario.className = "comentario-item";
+        comentario.innerText = texto;
+        document.getElementById("listaComentarios").appendChild(comentario);
+        const comentarios = JSON.parse(localStorage.getItem("comentarios") || "[]");
+        comentarios.push(texto);
+        localStorage.setItem("comentarios", JSON.stringify(comentarios));
+        document.getElementById("nuevaPropuesta").value = "";
+      }
+    }
+
+    function cargarComentarios() {
+      const comentarios = JSON.parse(localStorage.getItem("comentarios") || "[]");
+      comentarios.forEach(texto => {
+        const comentario = document.createElement("div");
+        comentario.className = "comentario-item";
+        comentario.innerText = texto;
+        document.getElementById("listaComentarios").appendChild(comentario);
+      });
+    }
+
+    function mostrarEspecificacion(id) {
+      document.querySelectorAll('.especificaciones').forEach(e => e.style.display = 'none');
+      const esp = document.getElementById(id);
+      esp.style.display = 'flex';
+      window.scrollTo(0, esp.offsetTop);
+    }
+
+    function ocultarEspecificaciones() {
+      document.querySelectorAll('.especificaciones').forEach(e => e.style.display = 'none');
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      mostrarSeccion('inicio');
+      cargarComentarios();
+    });
+  </script>
 </body>
 </html>
 

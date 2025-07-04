@@ -17,7 +17,6 @@
       scroll-behavior: smooth;
       background: linear-gradient(to right, #FF6347, #8B0000);
       color: #fff;
-      transition: background 0.3s ease;
     }
     h1, h2 { font-family: 'Playfair Display', serif; }
     header {
@@ -29,7 +28,6 @@
       font-weight: bold;
       border-bottom: 4px solid #FF6347;
       box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
     }
     header img {
       max-height: 100px;
@@ -44,7 +42,6 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
     nav a {
       color: #fff;
@@ -103,13 +100,6 @@
     .hero h1 {
       font-size: 4em;
       color: #FFD700;
-      animation: bounceIn 2s ease;
-    }
-
-    @keyframes bounceIn {
-      0% { transform: scale(0); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
     }
 
     .btn {
@@ -123,19 +113,12 @@
       margin-top: 20px;
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-      animation: pulse 2s infinite;
     }
 
     .btn:hover {
       background: #fff;
       transform: scale(1.1);
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
     }
 
     .gallery {
@@ -160,11 +143,6 @@
       border-radius: 15px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.1);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
     }
 
     .like-btn {
@@ -192,63 +170,6 @@
       text-align: center;
       display: none;
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-      animation: fadeInProximamente 1s ease-out forwards;
-    }
-
-    @keyframes fadeInProximamente {
-      from { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-      to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    }
-
-    .formulario input, .formulario textarea {
-      padding: 15px;
-      width: 100%;
-      max-width: 450px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      font-size: 1.1em;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    #mensajeEnviado {
-      color: #FFD700;
-      font-weight: bold;
-      margin-top: 25px;
-      display: none;
-    }
-
-    .comentarios {
-      margin-top: 50px;
-      background: #1c1c1c;
-      padding: 40px;
-      border-radius: 15px;
-      width: 90%;
-      max-width: 800px;
-    }
-
-    .comentarios h3 {
-      margin-bottom: 20px;
-    }
-
-    .comentarios textarea {
-      width: 100%;
-      height: 120px;
-      margin-bottom: 15px;
-      padding: 15px;
-      border-radius: 12px;
-      border: none;
-      font-size: 1.1em;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    .comentario-item {
-      background: #333;
-      padding: 20px;
-      border-radius: 12px;
-      margin-top: 15px;
-      text-align: left;
-      font-size: 1.2em;
-      color: #FFD700;
     }
 
     /* Estilo para el carrito */
@@ -276,6 +197,36 @@
       height: 80px;
       border-radius: 8px;
     }
+
+    /* Mensajes emergentes */
+    .mensajeEmergente {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #FFD700;
+      color: #330000;
+      padding: 20px 40px;
+      border-radius: 10px;
+      font-size: 1.5em;
+      text-align: center;
+      display: none;
+      z-index: 1000;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      animation: fadeInMensaje 0.5s ease forwards;
+    }
+
+    @keyframes fadeInMensaje {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -347,13 +298,15 @@
     ¡Este producto estará disponible pronto! Gracias por tu interés.
   </div>
 
+  <!-- Mensaje emergente -->
+  <div class="mensajeEmergente" id="mensajeEmergente"></div>
+
   <script>
     let carrito = [];
 
     // Función para agregar productos al carrito
     function agregarAlCarrito(producto, imagen, precio, cantidad) {
       if (cantidad < 1) return alert("Por favor, selecciona una cantidad válida.");
-      // Añadir el producto al carrito
       carrito.push({ producto, imagen, precio, cantidad: parseInt(cantidad) });
       actualizarCarrito();
     }
@@ -375,9 +328,22 @@
 
     // Función para proceder al pago (simulación)
     function procederAlPago() {
-      alert("Simulación de pago");
-      carrito = [];
-      actualizarCarrito();
+      mostrarMensajeEmergente("Por el momento no se puede comprar. Esperemos que te haya gustado nuestra página.");
+    }
+
+    // Función para mostrar mensaje emergente
+    function mostrarMensajeEmergente(mensaje) {
+      const mensajeEmergente = document.getElementById("mensajeEmergente");
+      mensajeEmergente.innerText = mensaje;
+      mensajeEmergente.style.display = "block";
+      setTimeout(() => {
+        mensajeEmergente.style.display = "none";
+      }, 3000);
+    }
+
+    // Función para enviar mensaje
+    function enviarMensaje() {
+      mostrarMensajeEmergente("¡Muchas gracias por mandarnos un mensaje! Lo tomaremos en cuenta.");
     }
 
     // Función para mostrar secciones

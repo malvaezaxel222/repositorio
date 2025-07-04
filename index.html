@@ -300,33 +300,78 @@
     .comentario-item {
       background: #333;
       padding: 20px;
-      border-radius: 12px;
-      margin-top: 15px;
+      border-radius: 15px;
+      margin-top: 20px;
       text-align: left;
-      font-size: 1.1em;
+      font-size: 1.2em;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Modo oscuro */
+    .modo-oscuro {
+      background: #333;
+      color: #fff;
+    }
+
+    .modo-oscuro header {
+      background: #222;
+      color: #FFD700;
+    }
+
+    .modo-oscuro nav {
+      background: #222;
+      color: #fff;
+    }
+
+    .modo-oscuro .btn {
+      background: #FFD700;
+      color: #330000;
+    }
+
+    .modo-oscuro .like-btn {
+      color: #FFD700;
+    }
+
+    .modo-oscuro .like-count {
+      color: #FFD700;
+    }
+
+    .modo-oscuro .proximamente {
+      background: #FF6347;
+    }
+
+    .modo-oscuro .comentarios {
+      background: #444;
     }
   </style>
 </head>
+
 <body>
+  <!-- Header -->
   <header>
     <img src="logo.png" alt="Logo ChocoFeliz" />
     ChocoFeliz
   </header>
 
+  <!-- Navegación -->
   <nav>
     <a onclick="mostrarSeccion('inicio')">Inicio</a>
     <a onclick="mostrarSeccion('productos')">Productos</a>
     <a onclick="mostrarSeccion('contacto')">Contacto</a>
+    <a onclick="toggleModoOscuro()" style="color: #FFD700;">Modo Oscuro</a>
   </nav>
 
+  <!-- Sección Hero -->
   <section class="hero active" id="inicio">
-    <video autoplay muted loop><source src="video.mp4" type="video/mp4"></video>
+    <video autoplay muted loop>
+      <source src="video.mp4" type="video/mp4">
+    </video>
     <h1>ChocoFeliz</h1>
     <h2>El chocolate que conquista paladares millonarios.</h2>
     <a class="btn" onclick="mostrarSeccion('productos')">Descubre nuestros productos</a>
   </section>
 
+  <!-- Sección Productos -->
   <section id="productos">
     <h2>Nuestros Chocolates Estrella</h2>
     <div class="gallery">
@@ -346,6 +391,7 @@
       </div>
     </div>
 
+    <!-- Sección Comentarios -->
     <div class="comentarios">
       <h3>Deja tu propuesta</h3>
       <textarea id="nuevaPropuesta" placeholder="Escribe tu idea para nuevos productos..."></textarea>
@@ -356,6 +402,7 @@
     <a class="btn" onclick="mostrarSeccion('inicio')">Volver al inicio</a>
   </section>
 
+  <!-- Especificaciones -->
   <section class="especificaciones" id="especificacionesFeliz">
     <h3>Chocolate Feliz</h3>
     <p>Medidas: 15cm x 15cm</p>
@@ -372,6 +419,7 @@
     <button class="btn" onclick="ocultarEspecificaciones()">Cerrar</button>
   </section>
 
+  <!-- Sección de Contacto -->
   <section id="contacto">
     <h2>Contacto</h2>
     <p>Escríbenos para pedidos personalizados:</p>
@@ -384,11 +432,14 @@
     </div>
   </section>
 
+  <!-- Mensaje de disponibilidad -->
   <div class="proximamente" id="mensajeProximamente">
     ¡Este producto estará disponible pronto! Gracias por tu interés.
   </div>
 
+  <!-- JavaScript -->
   <script>
+    // Funciones de la página
     function mostrarSeccion(id) {
       document.querySelectorAll("section").forEach(seccion => {
         seccion.classList.remove("active");
@@ -458,6 +509,10 @@
       document.querySelectorAll('.especificaciones').forEach(e => e.style.display = 'none');
     }
 
+    function toggleModoOscuro() {
+      document.body.classList.toggle('modo-oscuro');
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       mostrarSeccion('inicio');
       cargarComentarios();
@@ -465,6 +520,7 @@
   </script>
 </body>
 </html>
+
 
 
 

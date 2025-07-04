@@ -345,6 +345,16 @@
       localStorage.setItem("carrito", JSON.stringify(carrito));
     }
 
+    // Función para eliminar un producto del carrito
+    function eliminarDelCarrito(producto) {
+      // Filtramos el carrito para eliminar el producto específico
+      carrito = carrito.filter(item => item.producto !== producto);
+      // Actualizamos el carrito en la interfaz y en el almacenamiento local
+      actualizarCarrito();
+      mostrarMensajeEmergente(`${producto} eliminado del carrito.`);
+      localStorage.setItem("carrito", JSON.stringify(carrito));
+    }
+
     // Función para actualizar el carrito
     function actualizarCarrito() {
       const carritoContenido = document.getElementById("carritoContenido");
@@ -355,6 +365,7 @@
           <div class="producto-carrito">
             <img src="${item.imagen}" alt="${item.producto}">
             <span>${item.producto} x${item.cantidad} - $${item.precio * item.cantidad}</span>
+            <button class="btn" onclick="eliminarDelCarrito('${item.producto}')">Eliminar</button>
           </div>
         `).join('');
       }
@@ -369,7 +380,7 @@
       const totalConDescuento = total - total * descuento;
 
       document.getElementById("carritoContenido").innerHTML += `
-        <p>Total: $${total} ${descuento > 0 ? `(Descuento del 10% aplicado)` : ''}</p>
+        <p>Total: $${total} ${descuento > 0 ? (Descuento del 10% aplicado) : ''}</p>
         <p>Total con descuento: $${totalConDescuento}</p>
       `;
     }
@@ -424,7 +435,6 @@
 
 </body>
 </html>
-
 
 
 

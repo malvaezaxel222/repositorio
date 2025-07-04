@@ -340,7 +340,7 @@
       if (cantidad < 1) return alert("Por favor, selecciona una cantidad válida.");
       carrito.push({ producto, imagen, precio, cantidad: parseInt(cantidad) });
       actualizarCarrito();
-      mostrarMensajeEmergente(${producto} añadido al carrito.);
+      mostrarMensajeEmergente(`${producto} añadido al carrito.`);
       animarCarrito();
       localStorage.setItem("carrito", JSON.stringify(carrito));
     }
@@ -369,7 +369,7 @@
       const totalConDescuento = total - total * descuento;
 
       document.getElementById("carritoContenido").innerHTML += `
-        <p>Total: $${total} ${descuento > 0 ? (Descuento del 10% aplicado) : ''}</p>
+        <p>Total: $${total} ${descuento > 0 ? `(Descuento del 10% aplicado)` : ''}</p>
         <p>Total con descuento: $${totalConDescuento}</p>
       `;
     }
@@ -424,6 +424,5 @@
 
 </body>
 </html>
-
 
 

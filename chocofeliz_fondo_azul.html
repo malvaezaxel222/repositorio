@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ChocoFeliz - Tienda de Chocolates Artesanales</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+      scroll-behavior: smooth;
+      background: #87CEFA; /* Fondo azul cielo */
+    }
+
+    .fondo-animado {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
+      top: 0;
+      left: 0;
+    }
+    .choco {
+      position: absolute;
+      top: -100px;
+      width: 40px;
+      animation: caer 10s linear infinite;
+      opacity: 0.6;
+    }
+    .choco:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .choco:nth-child(2) { left: 30%; animation-delay: 2s; }
+    .choco:nth-child(3) { left: 50%; animation-delay: 4s; }
+    .choco:nth-child(4) { left: 70%; animation-delay: 1s; }
+    .choco:nth-child(5) { left: 90%; animation-delay: 3s; }
+
+    @keyframes caer {
+      0% { top: -100px; transform: rotate(0deg); }
+      100% { top: 110%; transform: rotate(360deg); }
+    }
+
+    header {
+      background: #fff;
+      color: #8B0000;
+      padding: 20px;
+      text-align: center;
+      font-size: 2.5em;
+      font-weight: bold;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav {
+      background: #660000;
+      text-align: center;
+      padding: 10px 0;
+      position: sticky;
+      top: 80px;
+      z-index: 9;
+    }
+    nav a {
+      color: #fff;
+      margin: 0 20px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1em;
+      cursor: pointer;
+    }
+    nav a:hover {
+      color: #FFD700;
+    }
+
+    section {
+      min-height: 100vh;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      color: #330000;
+      text-align: center;
+    }
+
+    .active {
+      display: flex !important;
+    }
+
+    .btn {
+      background: #FFD700;
+      color: #330000;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .product-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1200px;
+      margin-top: 30px;
+    }
+
+    .product-card {
+      background: #fff;
+      color: #330000;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      padding: 20px;
+      width: 260px;
+      text-align: center;
+    }
+
+    .product-card img {
+      width: 100%;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .product-card h3 {
+      margin: 10px 0 5px;
+    }
+
+    .purchase-form input {
+      padding: 10px;
+      font-size: 1em;
+      width: 60px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .hero {
+      background: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="fondo-animado">
+    <img src="chocolate1.png" class="choco" />
+    <img src="chocolate2.png" class="choco" />
+    <img src="chocolate3.png" class="choco" />
+    <img src="chocolate1.png" class="choco" />
+    <img src="chocolate2.png" class="choco" />
+  </div>
+
+  <header>
+    ChocoFeliz
+  </header>
+
+  <nav>
+    <a onclick="mostrarSeccion('inicio')">Inicio</a>
+    <a onclick="mostrarSeccion('producto')">Productos</a>
+    <a onclick="mostrarSeccion('contacto')">Contacto</a>
+  </nav>
+
+  <section class="hero active" id="inicio">
+    <h1>Bienvenido a ChocoFeliz</h1>
+    <p>Deliciosos chocolates artesanales hechos con amor.</p>
+    <div class="btn" onclick="mostrarSeccion('producto')">Ver productos</div>
+  </section>
+
+  <section id="producto">
+    <h2>Nuestros Chocolates</h2>
+    <div class="product-list">
+      <div class="product-card">
+        <img src="chocolate1.png" alt="Trufa Mágica">
+        <h3>Trufa Mágica</h3>
+        <p>Rellena de caramelo suave con cobertura de cacao puro.</p>
+        <div class="btn" onclick="comprar('Trufa Mágica')">Comprar</div>
+      </div>
+      <div class="product-card">
+        <img src="chocolate2.png" alt="Bomba de Avellana">
+        <h3>Bomba de Avellana</h3>
+        <p>Centro cremoso de avellanas cubierto de chocolate oscuro.</p>
+        <div class="btn" onclick="comprar('Bomba de Avellana')">Comprar</div>
+      </div>
+      <div class="product-card">
+        <img src="chocolate3.png" alt="Dulce Eclipse">
+        <h3>Dulce Eclipse</h3>
+        <p>Chocolate blanco con relleno de frutos rojos artesanales.</p>
+        <div class="btn" onclick="comprar('Dulce Eclipse')">Comprar</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="compra">
+    <h2>Compra tu chocolate</h2>
+    <p id="productoSeleccionado">Producto:</p>
+    <div class="purchase-form">
+      <label for="cantidad">Cantidad:</label><br>
+      <input type="number" id="cantidad" min="1" value="1" /><br>
+      <div class="btn" onclick="mostrarSeccion('tienda')">Comprar ahora</div>
+    </div>
+  </section>
+
+  <section id="tienda">
+    <h2>¡Próximamente disponible en línea!</h2>
+    <p>Estamos preparando la mejor experiencia de compra para ti.</p>
+    <div class="btn" onclick="mostrarSeccion('inicio')">Volver al inicio</div>
+  </section>
+
+  <section id="contacto">
+    <h2>Contacto</h2>
+    <p>Escríbenos a: <strong>hola@chocofeliz.com</strong></p>
+    <p>WhatsApp: +52 1 56 3714 1749</p>
+  </section>
+
+  <script>
+    function mostrarSeccion(id) {
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    function comprar(producto) {
+      mostrarSeccion('compra');
+      document.getElementById("productoSeleccionado").innerText = "Producto: " + producto;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      mostrarSeccion('inicio');
+    });
+  </script>
+</body>
+</html>

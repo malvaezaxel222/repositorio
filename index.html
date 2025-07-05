@@ -296,6 +296,8 @@
       <p>No hay productos en tu carrito aún.</p>
     </div>
     <button class="btn" onclick="procederAlPago()">Proceder al pago</button>
+    <!-- Texto simulado de agradecimiento en letras pequeñas -->
+    <small id="textoSimulado" style="display: none;">* Este mensaje es solo una simulación. Gracias por tu compra.</small>
   </section>
 
   <section id="contacto">
@@ -401,9 +403,15 @@
 
     // Proceder al pago (simulado)
     function procederAlPago() {
-      mostrarMensajeEmergente("Por el momento no se puede comprar. Esperemos que te haya gustado nuestra página.");
+        // Simulando el proceso de compra
+        setTimeout(() => {
+            // Mostrar el mensaje de agradecimiento en letras pequeñas
+            document.getElementById("textoSimulado").style.display = "block";
+            
+            // Mostrar el mensaje emergente de "Gracias por tu compra"
+            mostrarMensajeEmergente("Gracias por tu compra.");
+        }, 1000); // Simula un pequeño retraso en el proceso de pago
     }
-
     // Cargar carrito desde localStorage
     function cargarCarrito() {
       const carritoGuardado = JSON.parse(localStorage.getItem("carrito"));

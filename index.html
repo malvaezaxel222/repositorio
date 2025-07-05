@@ -264,8 +264,6 @@
     <a onclick="mostrarSeccion('productos')">Productos</a>
     <a onclick="mostrarSeccion('contacto')">Contacto</a>
     <a onclick="mostrarSeccion('carrito')">Carrito</a>
-    <a onclick="mostrarSeccion('descuentos')">Descuentos</a>
-    <a onclick="mostrarSeccion('recomendados')">Recomendados</a>
   </nav>
 
   <section id="inicio" class="hero active">
@@ -298,41 +296,28 @@
       <p>No hay productos en tu carrito aún.</p>
     </div>
     <button class="btn" onclick="procederAlPago()">Proceder al pago</button>
+    <!-- Texto simulado de agradecimiento en letras pequeñas -->
     <small id="textoSimulado" style="display: none;">* Este mensaje es solo una simulación. Gracias por tu compra.</small>
   </section>
 
-  <section id="recomendados">
-    <h2>Productos Recomendados</h2>
-    <div class="gallery">
-      <div class="producto-box">
-        <img src="chocolateextra.png" alt="Chocolate Extra">
-        <button class="btn">Añadir al carrito</button>
-      </div>
-      <div class="producto-box">
-        <img src="chocolateblanco.png" alt="Chocolate Blanco">
-        <button class="btn">Añadir al carrito</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="descuentos">
-    <h2>¡Descuentos Especiales!</h2>
-    <div>
-      <p>Compra 3 chocolates y recibe un 10% de descuento.</p>
-      <button class="btn" onclick="aplicarDescuento()">Aplicar descuento</button>
-    </div>
-  </section>
-
-  <section id="opiniones">
-    <h2>Opiniones de Clientes</h2>
-    <div>
-      <p>⭐️⭐️⭐️⭐️⭐️ "¡Me encantó el chocolate! 100% recomendado." - Ana</p>
-      <p>⭐️⭐️⭐️⭐️ "Un sabor único, definitivamente volveré por más." - Carlos</p>
-      <p>⭐️⭐️⭐️ "Buena calidad, pero algo caro." - Luis</p>
+  <section id="contacto">
+    <h2>Contacto</h2>
+    <p>Escríbenos para pedidos personalizados:</p>
+    <p><strong>Correo Electrónico:</strong> contacto@chocofeliz.com</p>
+    <p><strong>Teléfono:</strong> +52 55 1234 5678</p>
+    <p><strong>Dirección:</strong> Calle del Chocolate, #123, Col. Dulce, Ciudad de México, CDMX, México</p>
+    <div class="formulario">
+      <input type="text" id="nombre" placeholder="Tu nombre" />
+      <input type="email" id="correo" placeholder="Tu correo" />
+      <textarea id="mensaje" rows="4" placeholder="Tu mensaje"></textarea>
+      <button class="btn" onclick="enviarMensaje()">Enviar mensaje</button>
     </div>
   </section>
 
   <div class="mensajeEmergente" id="mensajeEmergente"></div>
+  <div class="proximamente" id="mensajeProximamente">
+    ¡Este producto estará disponible pronto! Gracias por tu interés.
+  </div>
 
   <div class="carrito-flotante" id="carritoFlotante" onclick="mostrarSeccion('carrito')">
     🛒
@@ -427,6 +412,14 @@
             mostrarMensajeEmergente("Gracias por tu compra.");
         }, 1000); // Simula un pequeño retraso en el proceso de pago
     }
+    // Cargar carrito desde localStorage
+    function cargarCarrito() {
+      const carritoGuardado = JSON.parse(localStorage.getItem("carrito"));
+      if (carritoGuardado) {
+        carrito = carritoGuardado;
+        actualizarCarrito();
+      }
+    }
 
     // Mostrar secciones
     function mostrarSeccion(id) {
@@ -447,6 +440,7 @@
 
 </body>
 </html>
+
 
 
 
